@@ -1,4 +1,5 @@
 #include "UnitTest.h"
+#include "util.h"
 #include "Slice.h"
 using namespace txh;
 using namespace std;
@@ -19,6 +20,18 @@ TEST(TestSlice)
 		cout << string(r).data() << endl;	
 		cout << r.toString().data() << endl;
 	}
+}
+
+TEST(TestUtil)
+{
+	time_t t;
+	time(&t);
+	cout << util::format("%s\n","test");
+	cout <<	util::readableTime(t).data() << endl;	
+	cout << atoi("123abc") << endl;
+	cout << util::timeMilli() << endl;
+	ExitCaller test([](){ cout << "destory" << endl;});
+	cout << "Test Return" << endl;
 }
 
 int main(int argc,char *argv[])
