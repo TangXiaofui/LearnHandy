@@ -1,12 +1,24 @@
 #include "UnitTest.h"
+#include "conf.h"
 #include "util.h"
 #include "Slice.h"
 using namespace txh;
 using namespace std;
 
+TEST(TestConf)
+{
+	LineScanner ls((char*)" [section] ");
+	string section = ls.skipSpace().skip(1).consumeTill(']');
+	Conf f;
+	f.parse("./test.ini");
+	cout << f.getInteger("section3","key1",0) << endl;
+	cout << f.getBoolean("section3","key4",false) << endl;
+	cout << f.getReal("section3","key3",0.0) << endl;
+}
+
 TEST(TestSlice)
 {
-	char *str = " abc def hij k ";
+	char *str = (char *)" abc def hij k ";
 	Slice ss(str);
 	cout << ss.begin() << endl;
 	ss.trimSpace();
