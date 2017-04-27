@@ -2,8 +2,23 @@
 #include "conf.h"
 #include "util.h"
 #include "Slice.h"
+#include "status.h"
 using namespace txh;
 using namespace std;
+
+TEST(TestStatus)
+{
+	Status t(Status::ioError("+","t"));
+	Status t2(move(Status::fromSystem()));
+	Status t3;
+	t3 = t2;
+	Status t4;
+	t4 = move(t3);
+	cout << t4.code() << " " << t4.msg() << endl;
+	cout << t4.toString().c_str() << endl;
+
+	
+}
 
 TEST(TestConf)
 {
