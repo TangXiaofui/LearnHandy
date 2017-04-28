@@ -3,8 +3,10 @@
 #include "util.h"
 #include "Slice.h"
 #include "status.h"
+#include "daemon.h"
 using namespace txh;
 using namespace std;
+
 
 TEST(TestStatus)
 {
@@ -61,18 +63,30 @@ TEST(TestUtil)
 	cout << "Test Return" << endl;
 }
 
+void quitfunc()
+{
+	exit(0);
+}
+
 int main(int argc,char *argv[])
 {
 	if(argc > 1)
 	{
-		for(int i = 1 ; i < argc ;++i)
-		{
-			test::RunAllTests(argv[i]);	
-		}
+	//	for(int i = 1 ; i < argc ;++i)
+	//	{
+	//		test::RunAllTests(argv[i]);	
+	//	}
+		char buf[64] = {0};
+		snprintf(buf,64,"%s.pid",argv[0]);
+		Daemon::daemonProcess(argv[1],buf);
+		Signal::signal(SIGQUIT,quitfunc);
+		sleep(300);
 	}
 	else
 	{
 	    test::RunAllTests(NULL);
 	}
+
+	
 	return 0;
 }
