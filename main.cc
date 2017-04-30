@@ -1,4 +1,5 @@
 #include "UnitTest.h"
+#include "file.h"
 #include "conf.h"
 #include "util.h"
 #include "Slice.h"
@@ -7,6 +8,27 @@
 using namespace txh;
 using namespace std;
 
+TEST(TestFile)
+{
+	ASSERT_EQ(File::fileExist("test"),true);
+	ASSERT_EQ(File::fileExist("t"),false); 
+	uint64_t size;
+	File::getFileSize("test",&size);
+	cout << size << endl;
+	File::createDir("abc");
+	File::deleteDir("def");
+	string cont;
+	File::getContent("tags",cont);
+	File::renameSave("tags_bak","tmp",cont);
+	vector<string> res;
+	File::getChildren("./",&res);
+	for(auto r : res)
+	{
+		cout << r << endl;	
+	}
+	
+			
+}
 
 TEST(TestStatus)
 {
@@ -72,15 +94,16 @@ int main(int argc,char *argv[])
 {
 	if(argc > 1)
 	{
-	//	for(int i = 1 ; i < argc ;++i)
-	//	{
-	//		test::RunAllTests(argv[i]);	
-	//	}
-		char buf[64] = {0};
+		for(int i = 1 ; i < argc ;++i)
+		{
+			test::RunAllTests(argv[i]);	
+		}
+/*		char buf[64] = {0};
 		snprintf(buf,64,"%s.pid",argv[0]);
 		Daemon::daemonProcess(argv[1],buf);
 		Signal::signal(SIGQUIT,quitfunc);
 		sleep(300);
+*/
 	}
 	else
 	{
