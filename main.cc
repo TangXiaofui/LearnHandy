@@ -5,8 +5,25 @@
 #include "Slice.h"
 #include "status.h"
 #include "daemon.h"
+#include "logging.h"
 using namespace txh;
 using namespace std;
+
+TEST(TestLog)
+{
+	Logger::getLogger().setFileName("test.log");
+	Logger::getLogger().setLogLevel("trace");
+	Logger::getLogger().setRotateInterval(5);
+	int i = 0;
+	while(1)	
+	{
+		//debug("This is %s\n","debug");
+		Logger::getLogger().logv(3,__FILE__,__LINE__,__func__,"this is a %d\n",i); 
+		sleep(1);
+		i++;
+		exitif(i == 10,"timeout");
+	}
+}
 
 TEST(TestFile)
 {
@@ -26,8 +43,6 @@ TEST(TestFile)
 	{
 		cout << r << endl;	
 	}
-	
-			
 }
 
 TEST(TestStatus)
