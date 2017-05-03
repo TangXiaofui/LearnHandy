@@ -1,9 +1,11 @@
+#ifndef UNITTEST_H
+#define UNITTEST_H
+
 #include <vector>
 #include <sstream>
 #include <iostream>
 #include <memory>
 #include <string.h>
-
 namespace txh{
 namespace test{
 using namespace std;
@@ -121,8 +123,7 @@ Tester& operator << (const X & x)
 #define ASSERT_FALSE(c) ::txh::test::Tester(__FILE__,__LINE__).Is(!(c),#c)
 #define ASSERT_EQ(x,y) ::txh::test::Tester(__FILE__,__LINE__).IsEq((x),(y))
 
-
-
 };
 }
 }
+#endif

@@ -1,13 +1,34 @@
+#include "port.h"
 #include "UnitTest.h"
+#include <arpa/inet.h>
 #include "file.h"
 #include "conf.h"
 #include "util.h"
-#include "Slice.h"
 #include "status.h"
 #include "daemon.h"
 #include "logging.h"
+#include "net.h"
+
+
 using namespace txh;
 using namespace std;
+
+TEST(TestNet)
+{
+	ASSERT_EQ(Ip4Addr("127.0.0.1",1234).toString(),"127.0.0.1:1234");
+}
+
+TEST(TestPort)
+{
+	uint16_t port = 0x1122;
+	ASSERT_EQ(port::htobe(port),htons(port));
+	uint32_t port2 = 0x11223344;
+	ASSERT_EQ(port::htobe(port2),htonl(port2));
+	struct in_addr ip4= port::getHostByName("127.1.1.1");
+	char buf[INET_ADDRSTRLEN] = {0};
+	inet_ntop(AF_INET,&ip4,buf,INET_ADDRSTRLEN);
+	cout << buf << endl;	
+}
 
 TEST(TestLog)
 {
@@ -124,7 +145,5 @@ int main(int argc,char *argv[])
 	{
 	    test::RunAllTests(NULL);
 	}
-
-	
 	return 0;
 }

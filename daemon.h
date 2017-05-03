@@ -1,4 +1,6 @@
-#pragma once
+#ifndef DAEMON_H
+#define DAEMON_H
+
 #include <functional>
 #include <signal.h>
 #include <map>
@@ -200,3 +202,4 @@ void Signal::signal(int sig,const function<void()> &handler)
 }
 
 }
+#endif

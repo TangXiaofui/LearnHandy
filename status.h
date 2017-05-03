@@ -1,4 +1,6 @@
-#pragma once
+#ifndef STATUS_H
+#define STATUS_H
+
 #include <errno.h>
 #include <stdarg.h>
 #include <string>
@@ -82,3 +84,4 @@ Status Status::ioError(const string &op,const string &name)
 
 }
 
+#endif

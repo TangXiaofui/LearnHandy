@@ -1,3 +1,5 @@
+#ifndef FILE_H
+#define FILE_H
 #include <string>
 #include <dirent.h>
 #include <sys/types.h>
@@ -142,3 +144,4 @@ bool File::fileExist(const string &fname)
 }
 
 }
+#endif

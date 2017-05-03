@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CONF_H
+#define CONF_H
 
 #include <map>
 #include <list>
@@ -197,3 +198,5 @@ list<string> Conf::getStrings(const string& section,const string& name)
 }
 
 }
+
+#endif
