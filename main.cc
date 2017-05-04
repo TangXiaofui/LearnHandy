@@ -1,4 +1,5 @@
 #include "port.h"
+#include "thread.h"
 #include "UnitTest.h"
 #include <arpa/inet.h>
 #include "file.h"
@@ -12,6 +13,29 @@
 
 using namespace txh;
 using namespace std;
+
+TEST(TestThread)
+{
+	ThreadPool pool(5,10,true);	
+	int processed = 0;
+	int *p = &processed;
+	int added = 0;
+	
+	for(int i = 0 ; i < 10 ; ++i)
+	{
+		added += pool.addTask([=]{ printf("task %d processed\n",++*p); });	
+	}
+//	pool.start();
+	printf("add another task,but not start\n");
+	for(int i = 0 ; i < 10 ; ++i)
+	{
+		added += pool.addTask([=]{ printf("task %d processed\n",++*p); });	
+	}
+	pool.exit();
+	pool.join();
+	printf("processed = %d , added = %d\n",processed,added);
+
+}
 
 TEST(TestNet)
 {
