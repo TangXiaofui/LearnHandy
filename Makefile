@@ -3,7 +3,7 @@ CXXFLAGS=-std=c++11 -g
 CXXLDFLAGS=-pthread
 
 
-main:main.o slice.o logging.o util.o net.o port.o thread.o
+main:main.o slice.o logging.o util.o net.o port.o thread.o eventbase.o poller.o channel.o
 	$(CXX) $^ -o $@ $(CXXFLAGS) $(CXXLDFLAGS)
 	ctags -R
 	cscope -Rbq

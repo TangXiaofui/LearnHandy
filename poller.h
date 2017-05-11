@@ -2,6 +2,7 @@
 #define POLLER_H
 #include "channel.h"
 #include <unistd.h>
+#include <poll.h>
 #include "logging.h"
 #include <string.h>
 #include <errno.h>
@@ -10,6 +11,7 @@
 #include "util.h"
 #include <atomic>
 #include <set>
+#include <sys/types.h>
 
 namespace txh{
 
@@ -18,10 +20,12 @@ const int MaxEvent = 2000;
 const int ReadEvent = POLLIN;
 const int WriteEvent = POLLOUT;
 
+struct Channel;
+
 struct PollerBase:private noncopyable{
 	int64_t m_id;
 	int m_lastActive;
-	PollerBase():lastActive(-1){
+	PollerBase():m_lastActive(-1){
 		static atomic<int64_t> id(0);
 		m_id = ++id; 
 	}

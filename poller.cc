@@ -4,7 +4,7 @@ namespace txh{
 
 PollerEpoll::PollerEpoll()
 {
-	m_fd = epoll_create1(EPOLL_CLOEXE);
+	m_fd = epoll_create1(EPOLL_CLOEXEC);
 	fatalif(m_fd < 0,"epoll_create failed , %d %s",errno,strerror(errno));
 	info("Poller epoll create %d",m_fd);		
 }
@@ -12,9 +12,9 @@ PollerEpoll::PollerEpoll()
 PollerEpoll::~PollerEpoll()
 {
 	info("destroying epoll fd %d",m_fd);
-	while(m_liveChannel.size())
+	while(m_liveChannels.size())
 	{
-		(*m_liveChannel.begin())->close();	
+		(*m_liveChannels.begin())->close();	
 	}	
 	close(m_fd);
 	info("epoll fd %d destroy",m_fd);
@@ -29,13 +29,13 @@ void PollerEpoll::addChannel(Channel *ch)
 	trace("adding channel %lld fd %d events %d epoll %d",(long long)ch->id(),ch->fd(),ev.events,m_fd);
 	int r = epoll_ctl(m_fd,EPOLL_CTL_ADD,ch->fd(),&ev);
 	fatalif(r < 0 ,"epoll_ctl add failed %d %s",errno,strerror(errno));
-	m_liveChannel.insert(ch);
+	m_liveChannels.insert(ch);
 }
 
 void PollerEpoll::removeChannel(Channel *ch)
 {
-	trace("deleting channel %lld fd %d events %d epoll %d",(long long)ch->id(),ch->fd(),ev.events,m_fd);
-	m_liveChannel.erase(ch);
+	trace("deleting channel %lld fd %d epoll %d",(long long)ch->id(),ch->fd(),m_fd);
+	m_liveChannels.erase(ch);
 	for(int i = m_lastActive; i >= 0; --i)
 	{
 		if(ch == m_activeEvents[i].data.ptr){
@@ -78,7 +78,7 @@ void PollerEpoll::loop_once(int waitMs)
 				ch->handleWrite();
 			}
 			else{
-				fatalif("unknow events");
+				fatal("unknow events");
 			}
 		}
 	}

@@ -6,11 +6,11 @@
 #include "util.h"
 #include "thread.h"
 #include "poller.h"
-
+#include "eventbase.h"
 namespace txh{
-
 using namespace std;
 
+struct EventBase;
 struct Channel:private noncopyable{
 	Channel(EventBase *base,int fd,int event);
 	~Channel();
@@ -36,10 +36,10 @@ struct Channel:private noncopyable{
 	void handleWrite() { m_writefunc(); }
 
 protected:
-	EventBase *base;
+	EventBase *m_base;
 	int m_fd;
 	PollerBase *m_poller;
-	int64_t id;
+	int64_t m_id;
 	short m_events;
 	Task m_readfunc;
 	Task m_writefunc;
