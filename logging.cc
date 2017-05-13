@@ -60,7 +60,7 @@ void Logger::logv(int level,const char *name,int line, const char *func,const ch
 	static_cast<int>(now_tv.tv_usec),
 	(long)tid,
 	levelStr[level],
-	m_filename.c_str(),
+	name,
 	line );
 	va_list ap;
 	va_start(ap,fmt);

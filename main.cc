@@ -8,11 +8,45 @@
 #include "status.h"
 #include "daemon.h"
 #include "logging.h"
-#include "net.h"
-
+#include "eventbase.h"
+#include <thread>
 
 using namespace txh;
 using namespace std;
+
+TEST(TestEventbase)
+{
+	EventBase base;
+	base.safeCall([]{
+		debug("base add task");
+	});		
+	thread t([&]{
+		this_thread::sleep_for(chrono::seconds(3));
+		debug("base exit");
+		base.exit();
+	});
+	base.loop();
+	t.join();
+}
+
+TEST(TestTimer)
+{
+	Logger::getLogger().setLogLevel("trace");
+	EventBase base;
+	long now = util::timeMilli();
+	info("adding timer");
+	TimerId tid1 = base.runAt(now+100,[&]{info("run at 100");});
+	TimerId tid2 = base.runAfter(50,[]{info("timer after 50");});
+	TimerId tid3 = base.runAfter(20,[]{info("timer interval 10");},10);
+	base.runAfter(120,[&]{
+		info("after 120 then cancel all");
+		base.cancel(tid1);
+		base.cancel(tid2);
+	 	base.cancel(tid3);
+		base.exit();	
+	});
+	base.loop();
+}
 
 TEST(TestThread)
 {
@@ -152,6 +186,7 @@ void quitfunc()
 
 int main(int argc,char *argv[])
 {
+	Logger::getLogger().setLogLevel("trace");
 	if(argc > 1)
 	{
 		for(int i = 1 ; i < argc ;++i)
@@ -163,8 +198,8 @@ int main(int argc,char *argv[])
 		Daemon::daemonProcess(argv[1],buf);
 		Signal::signal(SIGQUIT,quitfunc);
 		sleep(300);
-*/
-	}
+
+*/	}
 	else
 	{
 	    test::RunAllTests(NULL);

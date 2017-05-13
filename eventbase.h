@@ -41,15 +41,15 @@ struct EventBase:public EventBases{
 	
 	bool cancel(TimerId timerid);
 
-	TimerId runAt(int64_t waitMs,Task &&task,int64_t interval = 0);
-	TimerId runAt(int64_t waitMs,const Task &&task,int64_t interval = 0){
-		runAt(waitMs,Task(task),interval);
+	TimerId runAt(int64_t waitUs,Task &&task,int64_t interval = 0);
+	TimerId runAt(int64_t waitUs,const Task &&task,int64_t interval = 0){
+		runAt(waitUs,Task(task),interval);
 	}
-	TimerId runAfter(int64_t waitMs,Task &&task,int64_t interval = 0){
-		runAt(util::timeMilli()+waitMs,Task(task),interval);
+	TimerId runAfter(int64_t waitUs,Task &&task,int64_t interval = 0){
+		runAt(util::timeMilli()+waitUs,Task(task),interval);
 	}
-	TimerId runAfter(int64_t waitMs,const Task &&task,int64_t interval = 0){
-		runAfter(waitMs,Task(task),interval);	
+	TimerId runAfter(int64_t waitUs,const Task &&task,int64_t interval = 0){
+		runAfter(waitUs,Task(task),interval);	
 	}
 
 	EventBase& exit();
